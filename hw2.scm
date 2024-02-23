@@ -32,6 +32,30 @@
 
 )
 
+; Helper Function
+(define (maxelt lst)
+  (if (= (length lst) 1)
+      (car lst)
+      (max (car lst) (maxelt (cdr lst)))
+  )
+)
+
+; Helper Function
+(define (minelt lst)
+  (if (= (length lst) 1)
+      (car lst)
+      (min (car lst) (minelt (cdr lst)))
+  )
+)
+
+; Helper Function
+(define (product elm lst)
+  (if (equal? lst '())
+      '()
+      (cons (list elm (car lst)) (product elm (cdr lst)))
+  )
+)
+
 ; ================ Solve the following functions ===================
 ; Return a list with only the negatives items
 (define (negatives lst)
@@ -73,7 +97,7 @@
 ; in the list and the second is the largest in the list. 
 ; lst -- contains numeric values, and length is >= 1.
 (define (minAndMax lst)
-	'()
+	(list (minelt lst) (maxelt lst))
 )
 
 (line "minAndMax")
@@ -86,7 +110,11 @@
 ; that are inside nested loops taken out. So we want to flatten all elements and have
 ; them all in a single list. For example '(a (a a) a))) should become (a a a a)
 (define (flatten lst)
-	'()
+	(cond
+          ((equal? lst '()) '())
+          ((list? (car lst)) (append (flatten (car lst)) (flatten (cdr lst))))
+          (else (cons (car lst) (flatten (cdr lst))))
+          )
 )
 
 (line "flatten")
@@ -102,7 +130,10 @@
 ; ((1 a) (1 b) (1 c) (2 a) (2 b) (2 c))
 ; lst1 & lst2 -- two flat lists.
 (define (crossproduct lst1 lst2)
-	'()
+  (if (equal? lst1 '())
+      '()
+      (append (product (car lst1) lst2) (crossproduct (cdr lst1) lst2))
+  )
 )
 
 (line "crossproduct")
@@ -118,7 +149,13 @@
 ; from the 'zipcodes.scm' file for this. You can just call 'zipcodes' directly
 ; as shown in the sample example
 (define (getLatLon zipcode zips)
-	(list zipcode (car zips))
+	(if (equal? zips '())
+            '()
+            (if (= zipcode (caar zips))
+                (list (cadr (cdddar zips)) (caddr (cdddar zips)))
+                (getLatLon zipcode (cdr zips))
+            )
+        )
 )
 
 (line "getLatLon")
@@ -130,7 +167,7 @@
 ; placeName -- is the text corresponding to the name of the place
 ; zips -- the zipcode DB
 (define (getCommonPlaces state1 state2 zips)
-	(list state1 state2)
+  
 )
 
 (line "getCommonPlaces")
