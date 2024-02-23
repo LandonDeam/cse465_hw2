@@ -212,7 +212,13 @@
 ; state -- state
 ; zips -- zipcode DB
 (define (zipCount state zips)
-	0
+  (if (equal? zips '())
+      0
+      (if (equal? state (caddar zips))
+          (+ 1 (zipCount state (cdr zips)))
+          (zipCount state (cdr zips))
+      )
+  )
 )
 
 (line "zipCount")
