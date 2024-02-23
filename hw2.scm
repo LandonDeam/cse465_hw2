@@ -57,16 +57,32 @@
 )
 
 ; Helper Function
-(define (getPlaceMatch place state zips)
+(define (getPlacesFromState state zips)
   (if (equal? zips '())
       '()
       (if (equal? state (caddar zips))
-          (if (equal? place (cadar zips))
-              '(place)
-              '()
-          )
-          (getPlaceMatch place state (cdr zips))
+          (cons (cadar zips) (getPlacesFromState state (cdr zips)))
+          (getPlacesFromState state (cdr zips))
       )
+  )
+)
+
+; Helper Function
+(define (getAllMatches elm lst)
+  (if (equal? lst '())
+      '()
+      (if (equal? elm (car lst))
+          (cons (car lst) (getAllMatches elm (cdr lst)))
+          (getAllMatches elm (cdr lst))
+      )
+  )
+)
+
+; Helper Function
+(define (getAllListMatches lst1 lst2)
+  (if (equal? lst1 '())
+      '()
+      (append (getAllMatches (car lst1) lst2) (getAllListMatches (cdr lst1) lst2))
   )
 )
 
@@ -192,13 +208,9 @@
 ; placeName -- is the text corresponding to the name of the place
 ; zips -- the zipcode DB
 (define (getCommonPlaces state1 state2 zips)
-  (if (equal? zips '())
-      '()
-      (if (equal? state1 (caddar zips))
-          (append (getPlaceMatch (cadar zips) state2 zipcodes) (getCommonPlaces state1 state2 (cdr zips)))
-          (getCommonPlaces state1 state2 (cdr zips))
-          )
-      )
+  (define places1 (getPlacesFromState state1 zips))
+  (define places2 (getPlacesFromState state2 zips))
+  (getAllListMatches places1 places2)
 )
 
 (line "getCommonPlaces")
