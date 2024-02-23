@@ -26,7 +26,11 @@
 ; ================ Solve the following functions ===================
 ; Return a list with only the negatives items
 (define (negatives lst)
-	lst
+	(cond
+          ((equal? lst '()) '())
+          ((> 0 (car lst)) (cons (car lst) (negatives (cdr lst))))
+          ((negatives (cdr lst)))
+          )
 )
 
 (line "negatives")
