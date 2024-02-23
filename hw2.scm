@@ -70,6 +70,17 @@
   )
 )
 
+; Helper Function
+(define (filterList2 lst pred)
+  (if (equal? lst '())
+      '()
+      (if (pred (car lst))
+          (cons (car lst) (filterList2 (cdr lst) pred))
+          (filterList2 (cdr lst) pred)
+      )
+  )
+)
+
 ; ================ Solve the following functions ===================
 ; Return a list with only the negatives items
 (define (negatives lst)
@@ -254,7 +265,10 @@
 ; filters -- list of predicates to apply to the individual elements
 
 (define (filterList lst filters)
-	lst
+  (if (equal? filters '())
+      lst
+      (filterList (filterList2 lst (car filters)) (cdr filters))
+  )
 )
 
 (line "filterList")
