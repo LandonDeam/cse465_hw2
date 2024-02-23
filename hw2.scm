@@ -23,13 +23,22 @@
         (newline)
 )
 
+; Helper Function
+(define (length lst)
+  (if (null? lst)
+      0
+      (+ 1 (length (cdr lst)))
+  )
+
+)
+
 ; ================ Solve the following functions ===================
 ; Return a list with only the negatives items
 (define (negatives lst)
 	(cond
           ((equal? lst '()) '())
           ((> 0 (car lst)) (cons (car lst) (negatives (cdr lst))))
-          ((negatives (cdr lst)))
+          (else (negatives (cdr lst)))
           )
 )
 
@@ -44,7 +53,13 @@
 ; Returns true if the two lists have identical structure
 ; in terms of how many elements and nested lists they have in the same order
 (define (struct lst1 lst2)
-	#t
+	(cond
+          ((not (boolean=? (equal? lst1 '()) (equal? lst2 '()))) #f)
+          ((equal? lst1 '()) #t)
+          ((and (not (list? lst1)) (not (list? lst2))) #t)
+          ((not (boolean=? (list? lst1) (list? lst2))) #f)
+          (else (and (struct (car lst1) (car lst2)) (struct (cdr lst1) (cdr lst2))))
+          )
 )
 
 (line "struct")
