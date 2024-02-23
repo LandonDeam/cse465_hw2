@@ -68,11 +68,22 @@
 )
 
 ; Helper Function
+(define (removeElement elm lst)
+  (if (equal? lst '())
+      '()
+      (if (equal? elm (car lst))
+          (removeElement elm (cdr lst))
+          (cons (car lst) (removeElement elm (cdr lst)))
+          )
+      )
+)
+
+; Helper Function
 (define (getAllMatches elm lst)
   (if (equal? lst '())
       '()
       (if (equal? elm (car lst))
-          (cons (car lst) (getAllMatches elm (cdr lst)))
+          (list elm)
           (getAllMatches elm (cdr lst))
       )
   )
@@ -82,7 +93,7 @@
 (define (getAllListMatches lst1 lst2)
   (if (equal? lst1 '())
       '()
-      (append (getAllMatches (car lst1) lst2) (getAllListMatches (cdr lst1) lst2))
+      (append (getAllMatches (car lst1) lst2) (getAllListMatches (removeElement (car lst1) lst1) lst2))
   )
 )
 
