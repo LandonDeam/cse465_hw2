@@ -56,6 +56,20 @@
   )
 )
 
+; Helper Function
+(define (getPlaceMatch place state zips)
+  (if (equal? zips '())
+      '()
+      (if (equal? state (caddar zips))
+          (if (equal? place (cadar zips))
+              '(place)
+              '()
+          )
+          (getPlaceMatch place state (cdr zips))
+      )
+  )
+)
+
 ; ================ Solve the following functions ===================
 ; Return a list with only the negatives items
 (define (negatives lst)
@@ -167,7 +181,13 @@
 ; placeName -- is the text corresponding to the name of the place
 ; zips -- the zipcode DB
 (define (getCommonPlaces state1 state2 zips)
-  
+  (if (equal? zips '())
+      '()
+      (if (equal? state1 (caddar zips))
+          (append (getPlaceMatch (cadar zips) state2 zipcodes) (getCommonPlaces state1 state2 (cdr zips)))
+          (getCommonPlaces state1 state2 (cdr zips))
+          )
+      )
 )
 
 (line "getCommonPlaces")
